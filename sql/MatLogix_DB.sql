@@ -23,6 +23,19 @@ CREATE TABLE materials (
     image_url VARCHAR(255) DEFAULT 'images/materials/default.jpg'
 );
 
+
+-- Customers table
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(15),
+    address TEXT,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- Insert sample materials
 INSERT INTO materials (name, category, price, unit_type, quantity, description, image_url) VALUES
 ('Cement Bag', 'Cement', 1450.00, 'Per Bag', 200, '50kg high-quality cement bag', 'images/materials/cement.jpg'),
