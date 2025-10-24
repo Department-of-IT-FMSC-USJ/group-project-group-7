@@ -47,3 +47,12 @@ INSERT INTO materials (name, category, price, unit_type, quantity, description, 
 ('Fill Sand', 'Sand', 25000.00, 'Per Tractor', 30, 'Coarse fill sand for foundation', 'images/materials/fill_sand.jpg'),
 ('Gravel', 'Sand', 25000.00, 'Per Tractor', 30, 'Rounded gravel sand for drainage', 'images/materials/gravel.jpg'),
 ('Rubble Stone', 'Stone', 25000.00, 'Per Tractor', 25, 'Large rubble stone for foundation work', 'images/materials/rubble_stone.jpg');
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10,2) NOT NULL,
+    payment_method ENUM('Cash on Delivery', 'Card Payment') NOT NULL,
+    status ENUM('Pending', 'Confirmed', 'Delivered') DEFAULT 'Pending',
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE
+);
