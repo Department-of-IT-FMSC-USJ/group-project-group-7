@@ -23,6 +23,19 @@ CREATE TABLE materials (
     image_url VARCHAR(255) DEFAULT 'images/materials/default.jpg'
 );
 
+
+-- Customers table
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(15),
+    address TEXT,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- Insert sample materials
 INSERT INTO materials (name, category, price, unit_type, quantity, description, image_url) VALUES
 ('Cement Bag', 'Cement', 1450.00, 'Per Bag', 200, '50kg high-quality cement bag', 'images/materials/cement.jpg'),
@@ -34,3 +47,39 @@ INSERT INTO materials (name, category, price, unit_type, quantity, description, 
 ('Fill Sand', 'Sand', 25000.00, 'Per Tractor', 30, 'Coarse fill sand for foundation', 'images/materials/fill_sand.jpg'),
 ('Gravel', 'Sand', 25000.00, 'Per Tractor', 30, 'Rounded gravel sand for drainage', 'images/materials/gravel.jpg'),
 ('Rubble Stone', 'Stone', 25000.00, 'Per Tractor', 25, 'Large rubble stone for foundation work', 'images/materials/rubble_stone.jpg');
+
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10,2) NOT NULL,
+    payment_method ENUM('Cash on Delivery', 'Card Payment') NOT NULL,
+    status ENUM('Pending', 'Confirmed', 'Delivered') DEFAULT 'Pending',
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE
+);
+
+
+-- Order details table
+CREATE TABLE order_details (
+    order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    material_id INT,
+    quantity INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (material_id) REFERENCES materials(material_id) ON DELETE CASCADE
+);
+
+-- Payments table
+CREATE TABLE payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    payment_method ENUM('Cash on Delivery', 'Card Payment') NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    card_number VARCHAR(20),
+    card_holder_name VARCHAR(100),
+    status ENUM('Pending', 'Completed') DEFAULT 'Pending',
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
+);
+
